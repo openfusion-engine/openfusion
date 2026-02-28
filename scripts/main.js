@@ -1,5 +1,25 @@
 "use strict";
 
+if (navigator.userAgent.includes("Android"))
+{
+  menu_btns.hidden = true;
+  install.disabled = false;
+}
+
+switch (window.location.protocol)
+{
+  case "http:":
+  case "https:":
+    menu_btns.hidden = true;
+    break;
+  case "file:":
+    menu_btns.hidden = false;
+    break;
+  default:
+    menu_btns.hidden = true;
+    break;
+}
+
 const autosave_item = Object.freeze("OpenFusion_Autosave");
 const hex_length = Object.freeze(6);
 const rgb_length = Object.freeze(3);
@@ -18,31 +38,6 @@ const default_bytecode = Object.freeze({
 });
 
 let bytecode = Object.assign({}, default_bytecode);
-
-window.onload = function() {
-  if (navigator.userAgent.includes("Android"))
-  {
-    menu_btns.hidden = true;
-    install.disabled = false;
-  }
-
-  switch (window.location.protocol)
-  {
-    case "http:":
-    case "https:":
-      menu_btns.hidden = true;
-      break;
-    case "file:":
-      menu_btns.hidden = false;
-      break;
-    default:
-      menu_btns.hidden = true;
-      break;
-  }
-
-  if (!localStorage.getItem(autosave_item))
-  { return; }
-}
 
 window.onbeforeunload = function() {
   editor.hidden = true;

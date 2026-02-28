@@ -1,0 +1,14 @@
+*
+!.gitignore
+!index.html
+!LICENSE.txt
+!fonts
+!fonts/*
+!styles
+!styles/*
+!scripts
+!scripts/*
+!tests
+!tests/*
+!images
+!images/*
