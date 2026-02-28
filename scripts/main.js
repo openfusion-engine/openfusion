@@ -57,7 +57,7 @@ install.onclick = function() {
     case useragent.includes("Android"):
       break;
     default:
-      window.location.href = "./index.html";
+      window.open("https://github.com/openfusion-engine/openfusion/archive/refs/heads/master.zip");
       break;
   }
 };
