@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>OpenFusion</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body>
+    <div id="app_creation" hidden>
+      <form class="popup" id="app_creation_form">
+        <h2>Application Creation</h2>
+        <p>If you want to skip this, you can just click the Create button.</p>
+        <label for="app_name">Application name:</label>
+        <input name="app_name" type="text" value="OpenFusion Application">
+        <br>
+        <label for="app_width">Application width:</label>
+        <input name="app_width" type="number" min="512" max="1024" value="512">
+        <br>
+        <label for="app_height">Application height:</label>
+        <input name="app_height" type="number" min="512" max="768" value="512">
+        <br>
+        <br>
+        <br>
+        <br>
+        <button type="submit">Create</button>
+        <br>
+        <button type="button" id="cancel_creation">Cancel</button>
+      </form>
+    </div>
+    <div id="menu_btns" align="center">
+      <button onclick="window.location.href = './index.html#whats_new';">What's New</button>
+      <br>
+      <button onclick="window.location.href = './index.html#patch_notes';">Patch Notes</button>
+      <br>
+      <button onclick="window.location.href = './index.html#docs';">Read Documentations</button>
+      <br>
+      <button id="ret_menu" disabled>Return to Menu</button>
+      <br>
+      <button id="ret_editor" disabled>Return to Editor</button>
+      <br>
+      <button id="new_app">New Application</button>
+      <br>
+      <button id="open_app">Open Application</button>
+      <br>
+      <button id="close_app" disabled>Close Application</button>
+    </div>
+    <div id="menu">
+      <div align="center">
+        <h1 align="center">OpenFusion</h1>
+        <h3 align="center">
+          <b><i>An entirely free game engine, made for performance and an alternative to Clickteam Fusion.</i></b>
+        </h3>
+        <div id="main_btns">
+          <button id="install">Install Software</button>
+        </div>
+        <br>
+      </div>
+      <div class="container">
+        <h2>Why OpenFusion?</h2>
+        <p>
+        OpenFusion is multi-platform website game engine that's very light-weight. The program is designed to very light-weight
+        and efficent, so that no package manager are needed for the program; it's also blazingly fast when you're trying to compile
+        your script with the Dwarf compiler. The entire codebase is open-source, so everyone can use/distribute it for free.
+        </p>
+      </div>
+      <div class="container">
+        <h2>About Us</h2>
+        <p>
+        OpenFusion was originally created by
+        <a onclick="window.open('https://github.com/antagonistry');">@antagonistry</a>
+        in (MM/DD/YYYY) February 27 2026, it was designed to an alternative to the
+        Clickteam Fusion, and it also supports easier networking and even faster
+        performance. If you want to contribute to our project, you can; right now!
+        </p>
+      </div>
+      <div class="container">
+        <h2 id="whats_new">What's New</h2>
+        <ul>
+          <li>
+            Create
+            <b><i>OpenFusion</i></b>
+          </li>
+          <li>
+            Add
+            <i>documentations</i>
+            for
+            <i>accessibility</i>
+            without
+            <i>internet</i>
+          </li>
+        </ul>
+      </div>
+      <div class="container">
+        <h2 id="patch_notes">Patch Notes</h2>
+        <ul>
+          <h2>0.0.1</h2>
+          <li>
+            Create
+            <b><i>OpenFusion</i></b>
+          </li>
+          <li>
+            Add
+            <i>documentations</i>
+            for
+            <i>accessibility</i>
+            without
+            <i>internet</i>
+          </li>
+        </ul>
+      </div>
+      <div class="container">
+        <h2 id="docs">Documentations</h2>
+        <ul>
+          <h2>Table of Contents</h2>
+          <ul>
+            <a onclick="window.location.href = './index.html#getting_started';">Getting Started</a>
+            <br>
+            <a onclick="window.location.href = './index.html#classic_hello_world_application';">Classic Hello World Application</a>
+          </ul>
+        </ul>
+        <ul>
+          <h2 id="getting_started">Getting Started</h2>
+          <p>
+          To start installing OpenFusion, you need to install these dependencies first, here's what you'll need.
+          </p>
+          <li>Git - Version control</li>
+          <li>NodeJS - JavaScript runtime</li>
+          <br>
+          <ul>
+            <h2>Windows</h2>
+            <p>
+            First, you need to install Git from
+            <a onclick="window.open('https://git-scm.com/install/windows');">this link</a>,
+            if you've not installed already.
+            </p>
+            <p>
+            And then install NodeJS with
+            <a onclick="window.open('https://nodejs.org/en/download');">this link</a>;
+            after you've installed these dependencies, you can now use the Git
+            to clone the repository to your desktop folder, by using the command below
+            inside your Windows Command Prompt (cmd.exe).
+            </p>
+            <div class="code"><h2>Windows Command Prompt</h2>
+C:\Windows\System32&gt; git clone https://github.com/openfusion-engine/openfusion.git OpenFusion</div>
+            <p>
+            After the you've cloned the repository, you may now see the OpenFusion in
+            your desktop folder. Now it's the last part, moving the Dwarf compiler to
+            the Program Files folder. After everything is done, open index.html inside
+            the OpenFusion folder and enjoy creating your application!
+            <h2>Unix-like (Linux, BSD & MacOS)</h2>
+            <p>
+            First, you need to install Git from
+            <a onclick="window.open('https://git-scm.com/install/linux');">this link</a>,
+            if you've not installed already.
+            </p>
+            <p>
+            And then install NodeJS with
+            <a onclick="window.open('https://nodejs.org/en/download');">this link</a>;
+            after you've installed these dependencies, you can now use the Git
+            to clone the repository to your desktop folder, by using the command below
+            inside your terminal.
+            </p>
+            <div class="code"><h2>Shell</h2>
+user@host:~$ git clone https://github.com/openfusion-engine/openfusion.git OpenFusion</div>
+            <p>
+            After the you've cloned the repository, you may now see the OpenFusion in
+            your desktop folder. Now it's the last part, moving the Dwarf compiler to
+            the binaries folder like this command below:
+            </p>
+            <div class="code"><h2>Shell</h2>
+user@host:~$ sudo mv dwc /usr/bin</div>
+            <p>
+            It'll ask you for permission first but it's ok; and after everything is done,
+            open index.html inside the OpenFusion folder and enjoy creating your application! 
+            </p>
+          </ul>
+        </ul>
+        <ul>
+          <h2 id="classic_hello_world_application">Classic Hello, World Application</h2>
+          <p>
+          If you've never heard about "Hello, World" program before, it's just a program displaying the word "Hello, World" on the screen.
+          In OpenFusion, you'll need to use the Dwarf language and the OpenFusion editor to get the work done.
+          </p>
+          <p>
+          First, click the new application on the menu, then click create; after that you'll go inside the editor.
+          After you're in the editor, open click the script editor and paste the code below.
+          </p>
+          <div class="code"><h2>MyApp.dw</h2>
+#!/usr/bin/dwc
+moduleFrom "./MyApp.json"
+importTo "./MyApp.js"
+importFrom $MyString as string
+
+when IS LOADED
+  locate $MyString center center
+  size $MyString auto auto
+  setAttribute $MyString "font" "monospace"
+  setAttribute $MyString "size" 32
+  setAttribute $MyString "text" "Hello, World!"
+  show $MyString
+end</div>
+          <p>
+          After you've copy this exact script, you can now compile it into JavaScript's format, by using the dwc compiler;
+          then finally, load the script and test the application. Here's what'll happen inside the application.
+          </p>
+        </ul>
+      </div>
+      <div class="container">
+        <h2>Licensing</h2>
+        <p>
+        OpenFusion uses MIT License for the entire software, more informations about the license is
+        <a onclick="window.open('./LICENSE.txt');">here</a>.
+        </p>
+      </div>
+    </div>
+    <div id="editor" hidden>
+      <div id="scene"></div>
+      <div id="app_controller">
+        <h2>Controller</h2>
+        <button id="test_app">Test Application</button>
+        <hr>
+        <button id="build_app">Build Application</button>
+        <hr>
+        <button id="load_script">Load Script</button>
+      </div>
+      <div id="toolbar">
+        <h2>Toolbar</h2>
+        <button id="new_instance">New Instance</button>
+        <hr>
+        <button id="remove_instance">Remove Instance</button>
+        <hr>
+        <button id="edit_instance">Edit Instance</button>
+      </div>
+      <div id="properties">
+        <h2>Properties</h2>
+        <button id="new_property">New Property</button>
+        <hr>
+        <button id="remove_property">Remove Property</button>
+        <hr>
+        <button id="edit_property">Edit Property</button>
+      </div>
+    </div>
+    <input type="file" id="file_input_app" accept=".json" hidden>
+    <input type="file" id="file_input_script" accept=".js" hidden>
+    <script type="text/javascript" src="scripts/main.js"></script>
+  </body>
+</html>

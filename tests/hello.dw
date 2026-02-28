@@ -1,0 +1,26 @@
+#!/usr/bin/dwc
+moduleFrom "./MyApp.json"
+exportTo "./MyApp.js"
+importFrom $MyString as string
+
+when IS LOADED
+  locate $MyString center center
+  size $MyString auto auto
+  setAttribute $MyString \
+    "font" "monospace"
+  setAttribute $MyString \
+    "size" 32
+  setAttribute $MyString \
+    "text" "Hello, World!"
+  show $MyString
+end
+
+when IS HOVER $MyString
+  setAttribute $MyString \
+    "size" 48
+end
+
+when NOT HOVER $MyString
+  setAttribute $MyString \
+    "size" 32
+end
