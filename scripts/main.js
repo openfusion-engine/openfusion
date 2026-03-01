@@ -1,7 +1,11 @@
 "use strict";
 
-if (navigator.userAgent.includes("Android"))
+let user_agent = navigator.userAgent;
+
+if (user_agent.includes("Android") || (user_agent.includes("iOS") && !user_agent.includes("iPad")))
 {
+  large_icon.hidden = true;
+  small_icon.hidden = false;
   menu_btns.hidden = true;
   install.disabled = false;
 }
@@ -21,10 +25,6 @@ switch (window.location.protocol)
 }
 
 const autosave_item = Object.freeze("OpenFusion_Autosave");
-const hex_length = Object.freeze(6);
-const rgb_length = Object.freeze(3);
-const rgb_number_length = Object.freeze(3);
-const rgba_length = Object.freeze(4);
 
 const default_bytecode = Object.freeze({
   "version": "0.0.1",

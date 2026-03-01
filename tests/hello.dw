@@ -1,4 +1,3 @@
-#!/usr/bin/dwc
 moduleFrom "./MyApp.json"
 exportTo "./MyApp.js"
 importFrom $MyString as string

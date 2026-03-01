@@ -47,7 +47,8 @@
     </div>
     <div id="menu">
       <div align="center">
-        <h1 align="center">OpenFusion</h1>
+        <h1 align="center" id="small_icon" hidden>OpenFusion</h1>
+        <img src="images/logo.webp" id="large_icon">
         <h3 align="center">
           <b><i>An entirely free game engine, made for performance and an alternative to Clickteam Fusion.</i></b>
         </h3>
@@ -65,47 +66,50 @@
         </p>
       </div>
       <div class="container">
+        <h2>Fun Fact</h2>
+        <q>
+        When I was a kid, I tried to make the application opens itself and make my computer stop responding, because Clickteam
+        Fusion's runtime used a standalone application to do that kind of thing and that really screwed me up at that day.
+        </q>
+        <ul>
+          <p>
+          -
+          <a onclick="window.open('https://github.com/antagonistry');">@antagonistry</a>
+          </p>
+        </ul>
+      </div>
+      <div class="container">
         <h2>About Us</h2>
         <p>
         OpenFusion was originally created by
         <a onclick="window.open('https://github.com/antagonistry');">@antagonistry</a>
-        in (MM/DD/YYYY) February 27 2026, it was designed to an alternative to the
+        in February 27 2026, it was designed to an alternative to the
         Clickteam Fusion, and it also supports easier networking and even faster
         performance. If you want to contribute to our project, you can; right now!
         </p>
-      </div>
-      <div class="container">
-        <h2 id="whats_new">What's New</h2>
-        <ul>
-          <li>
-            Create
-            <b><i>OpenFusion</i></b>
-          </li>
-          <li>
-            Add
-            <i>documentations</i>
-            for
-            <i>accessibility</i>
-            without
-            <i>internet</i>
-          </li>
-        </ul>
       </div>
       <div class="container">
         <h2 id="patch_notes">Patch Notes</h2>
         <ul>
           <h2>0.0.1</h2>
           <li>
-            Create
-            <b><i>OpenFusion</i></b>
+            Create OpenFusion
           </li>
           <li>
-            Add
-            <i>documentations</i>
-            for
-            <i>accessibility</i>
-            without
-            <i>internet</i>
+            Add save and load system to the editor
+          </li>
+          <li>
+            Create Dwarf programming language
+          </li>
+          <li>
+            Add documentations for accessibility without any internet connection
+          </li>
+          <h2>0.0.2</h2>
+          <li>
+            Add more keywords to Dwarf language
+          </li>
+          <li>
+            Add more contents to the documentations
           </li>
         </ul>
       </div>
@@ -116,63 +120,28 @@
           <ul>
             <a onclick="window.location.href = './index.html#getting_started';">Getting Started</a>
             <br>
-            <a onclick="window.location.href = './index.html#classic_hello_world_application';">Classic Hello World Application</a>
+            <a onclick="window.location.href = './index.html#classic_hello_world_application';">Classic "Hello World!" Application</a>
+            <br>
+            <a onclick="window.location.href = './index.html#learning_the_syntaxes';">Learning the Syntaxes</a>
           </ul>
         </ul>
         <ul>
           <h2 id="getting_started">Getting Started</h2>
           <p>
           <ul>
-            <h2>Windows</h2>
             <p>
-            First, you need to install Git from
-            <a onclick="window.open('https://git-scm.com/install/windows');">this link</a>,
-            if you've not installed already.
-            </p>
-            <p>
-            And then install NodeJS with
+            First, you need to download the
+            <a onclick="install.click();">repository ZIP file</a>
+            up there, and then install NodeJS with
             <a onclick="window.open('https://nodejs.org/en/download');">this link</a>;
-            after you've installed these dependencies, you can now use the Git
-            to clone the repository to your desktop folder, by using the command below
-            inside your Windows Command Prompt (cmd.exe).
-            </p>
-            <div class="code"><h2>Windows Command Prompt</h2>
-C:\Windows\System32&gt; git clone https://github.com/openfusion-engine/openfusion.git OpenFusion</div>
-            <p>
-            After the you've cloned the repository, you may now see the OpenFusion in
-            your desktop folder. Now it's the last part, moving the Dwarf compiler to
-            the Program Files folder. After everything is done, open index.html inside
-            the OpenFusion folder and enjoy creating your application!
-            <h2>Unix-like (Linux, BSD & MacOS)</h2>
-            <p>
-            First, you need to install Git from
-            <a onclick="window.open('https://git-scm.com/install/linux');">this link</a>,
-            if you've not installed already.
-            </p>
-            <p>
-            And then install NodeJS with
-            <a onclick="window.open('https://nodejs.org/en/download');">this link</a>;
-            after you've installed these dependencies, you can now use the Git
-            to clone the repository to your desktop folder, by using the command below
-            inside your terminal.
-            </p>
-            <div class="code"><h2>Shell</h2>
-user@host:~$ git clone https://github.com/openfusion-engine/openfusion.git OpenFusion</div>
-            <p>
-            After the you've cloned the repository, you may now see the OpenFusion in
-            your desktop folder. Now it's the last part, moving the Dwarf compiler to
-            the binaries folder like this command below:
-            </p>
-            <div class="code"><h2>Shell</h2>
-user@host:~$ sudo mv dwc /usr/bin</div>
-            <p>
-            It'll ask you for permission first but it's ok; and after everything is done,
+            after you've installed NodeJS and downloaded the repository ZIP file, you may
+            now see the OpenFusion in your download folder. After everything is done,
             open index.html inside the OpenFusion folder and enjoy creating your application! 
             </p>
           </ul>
         </ul>
         <ul>
-          <h2 id="classic_hello_world_application">Classic Hello, World Application</h2>
+          <h2 id="classic_hello_world_application">Classic "Hello, World!" Application</h2>
           <p>
           If you've never heard about "Hello, World" program before, it's just a program displaying the word "Hello, World" on the screen.
           In OpenFusion, you'll need to use the Dwarf language and the OpenFusion editor to get the work done.
@@ -182,7 +151,6 @@ user@host:~$ sudo mv dwc /usr/bin</div>
           After you're in the editor, open click the script editor and paste the code below.
           </p>
           <div class="code"><h2>MyApp.dw</h2>
-#!/usr/bin/dwc
 moduleFrom "./MyApp.json"
 importTo "./MyApp.js"
 importFrom $MyString as string
@@ -198,6 +166,51 @@ end</div>
           <p>
           After you've copy this exact script, you can now compile it into JavaScript's format, by using the dwc compiler;
           then finally, load the script and test the application. Here's what'll happen inside the application.
+          </p>
+          <img src="images/hello_openfusion.webp">
+        </ul>
+        <ul>
+          <h2 id="learning_the_syntaxes">Learning the Syntaxes</h2>
+          <p>
+          Dwarf is language that's very easy to learn. In the future, the language would be implemented in C++, for
+          faster compilation. Here's all keywords that you'll need to learn.
+          </p>
+          <div class="code"><h2>keywords.dw</h2>
+# This line is a comment, the compiler will cut this part out of its way.
+
+moduleFrom [application_filename (string)]
+# example for moduleFrom:   moduleFrom "./MyApp.json"
+
+exportTo [target_filename (string)]
+# example for exportTo:     exportTo "./MyApp.js"
+
+importFrom [instance_name (string)]
+# example for importFrom:   importFrom $MyString as string
+
+when [logical_operator (logic)] [condition (symbol)/[instance_id (instance)] [action_name (action)] [...]
+# example for when:         when IS $MyString HOVER
+#                           when IS $MyString HOVER AND NOT $MyString HOVER
+
+locate [instance_id (instance)] [x_position (integer)/center] [y_position (integer)/center]
+# example for locate:       locate $MyString center center
+
+size [instance_id (instance)] [width (integer)/full] [width (integer)/full]
+# example for size:         size $MyString full full
+
+setAttribute [instance_id (instance)] [attribute_name (string)] [attribute_value (string)]
+# example for setAttribute: setAtribute $MyString "text" "Hello, World!"
+
+show [instance_id (instance)]
+# example for show:         show $MyString
+
+show [instance_id (instance)]
+# example for show:         show $MyString
+
+end
+# note: end is a keyword to end the when statement
+# example for end:          end</div>
+          <p>
+          Please take your time and read all informations about the keywords.
           </p>
         </ul>
       </div>

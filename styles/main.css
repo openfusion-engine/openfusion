@@ -32,11 +32,15 @@ body {
   font-family: "firasans_regular";
 }
 
+div {
+  scrollbar-width: none;
+}
+
 h2 {
   color: #D6E9FF;
 }
 
-p, li, a {
+p, li, a, q {
   user-select: text;
   font-size: 16px;
 }
@@ -125,7 +129,6 @@ button, input {
 }
 
 #menu, #editor {
-  scrollbar-width: none;
   justify-content: center;
   border-radius: 8px;
   border: 4px solid #dadada;
