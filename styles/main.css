@@ -25,7 +25,7 @@ body {
   display: flex;
   width: 100%;
   height: 100%;
-  background-color: #333333;
+  background-color: #222222;
   user-select: none;
   color: #FFFFFF;
   font: caption;
@@ -99,7 +99,7 @@ a {
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 8px;
-  width: 50%;
+  width: auto;
   font: caption;
   font-family: "firamono_regular";
   background-color: #222222;
