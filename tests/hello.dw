@@ -4,22 +4,24 @@ importFrom $MyString as string
 
 when IS LOADED
   locate $MyString center center
-  size $MyString auto auto
+  size $MyString full full
   setAttribute $MyString \
     "font" "monospace"
   setAttribute $MyString \
-    "size" 32
+    "fontSize" 32
   setAttribute $MyString \
     "text" "Hello, World!"
+  setAttribute $MyString \
+    "textAlign" "center"
   show $MyString
 end
 
 when IS HOVER $MyString
   setAttribute $MyString \
-    "size" 48
+    "fontSize" 48
 end
 
 when NOT HOVER $MyString
   setAttribute $MyString \
-    "size" 32
+    "fontSize" 32
 end

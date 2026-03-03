@@ -40,7 +40,8 @@ h2 {
   color: #D6E9FF;
 }
 
-p, li, a, q {
+p, li, a, q, span {
+  font-family: "firasans_regular";
   user-select: text;
   font-size: 16px;
 }
@@ -107,7 +108,7 @@ a {
   user-select: text;
 }
 
-button, input {
+button, input, select {
   cursor: pointer;
   font: caption;
   font-family: "firasans_regular";
@@ -194,7 +195,7 @@ button, input {
   position: absolute;
   bottom: 3%;
   right: 3%;
-  opacity: 0.25;
+  opacity: 0.125;
   transition: 0.25s;
 }
 
@@ -244,7 +245,7 @@ button, input {
   border-bottom: 2px solid #444444;
 }
 
-#toolbar {
+#instances {
   width: 256px;
   height: 95%;
   position: absolute;
@@ -289,7 +290,7 @@ button, input {
   transition: 0.25s;
 }
 
-#toolbar:hover, #properties:hover, #app_controller:hover {
+#instances:hover, #properties:hover, #app_controller:hover {
   opacity: 1.0;
 }
 
@@ -306,15 +307,15 @@ button, input {
   margin-bottom: 6px;
 }
 
-#toolbar button, #properties button {
+#instances button, #properties button {
   width: 75%;
 }
 
-#toolbar hr, #properties hr, #app_controller hr {
+#instances hr, #properties hr, #app_controller hr {
   visibility: hidden;
 }
 
-#toolbar h2 {
+#instances h2 {
   width: 95%;
   padding: 2px;
   transform: translate(-2%, 0);

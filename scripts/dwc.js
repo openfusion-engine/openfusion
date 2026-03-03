@@ -3,7 +3,7 @@
 const fs = require("node:fs");
 const argv = Object.freeze(process.argv);
 const illegal_keywords = "@%^&*()|[{}];:',<.>/?";
-const version = "0.0.1";
+const version = "0.0.2";
 let compiled = String();
 let original = String();
 let module_from = "";
@@ -14,6 +14,8 @@ let parsed_moduleFrom = false;
 let parsed_exportTo = false;
 let added_interval = false;
 let parsing_when = false;
+let when_is_loaded = false;
+let when_is_loadeds = 0;
 
 if (argv.length == 2) {
   console.log("Dwarf language compiler (v" + version + ")");
@@ -138,6 +140,16 @@ function check_string(token) {
   return false;
 }
 
+function check_number(token) {
+  if (typeof(token) !== "string")
+  { return false; }
+
+  if (isNaN(parseInt(token)))
+  { return false; }
+
+  return true;
+}
+
 function check_instance(token) {
   if (typeof(token) !== "string")
   { return false; }
@@ -232,12 +244,6 @@ function process_tokens(tokens) {
   if (typeof(export_to) !== "string")
   {
     console.error("Variable \"export_to\" is not a string.");
-    process.exit(1);
-  }
-
-  if (typeof(import_froms) !== "object")
-  {
-    console.error("Variable \"import_froms\" is not an object.");
     process.exit(1);
   }
 
@@ -419,9 +425,9 @@ function process_tokens(tokens) {
 
       tokens[1] = tokens[1].substr(1, tokens[1].length);
       import_froms.push(tokens[1]);
-      line = "const " + tokens[1] + " = document.querySelector(\"#scene/";
-      line += tokens[1] + "\");\n" + "if (" + tokens[1] + " === null) {\n";
-      line += "console.error(\"This script isn't compatible with your application.\");\n";
+      line = "const " + tokens[1] + " = scene.querySelector(\"#" + tokens[1] + "\");\n";
+      line += "if (" + tokens[1] + " === null) {\n";
+      line += "throw new Error(\"This script isn't compatible with your application.\");\n";
       line += "}\n";
       break;
     case "when":
@@ -436,6 +442,21 @@ function process_tokens(tokens) {
       let no_and = true;
       let parse_after_and = false;
       tokens.splice(0, 1);
+
+      if (tokens[0] === "IS" && tokens[1] === "LOADED" && tokens.length === 2)
+      { when_is_loaded = true; }
+
+      if (tokens[0] === "IS" && tokens[1] === "LOADED" && tokens.length === 2 && when_is_loadeds > 0)
+      {
+        console.error("Line: '" + original + "'", "cannot use \"when IS LOADED\" more than once.");
+        process.exit(1);
+      }
+
+      if (tokens.includes("LOADED") && when_is_loadeds > 0)
+      {
+        console.error("Line: '" + original + "'", "cannot use \"LOADED\" keyword more than once.");
+        process.exit(1);
+      }
 
       while (tokens[0] !== undefined)
       {
@@ -539,14 +560,268 @@ function process_tokens(tokens) {
       parsing_when = true;
       break;
     case "end":
+      if (tokens.length < 1)
+      {
+        console.error("Line: '" + original + "'", "too few arguments.");
+        process.exit(1);
+      }
+
+      if (tokens.length > 1)
+      {
+        console.error("Line: '" + original + "'", "too many arguments.");
+        process.exit(1);
+      }
+
       if (!parsing_when)
       {
         console.error("Line: '" + original + "'", "stray \"end\" keyword.");
         process.exit(1);
       }
 
+      if (when_is_loaded == true)
+      {
+        when_is_loaded = false;
+        when_is_loadeds++;
+        line += "loaded = false;\n";
+      }
+      
       line += "}";
       parsing_when = false;
+      break;
+    case "locate":
+      if (tokens.length < 4)
+      {
+        console.error("Line: '" + original + "'", "too few arguments.");
+        process.exit(1);
+      }
+
+      if (tokens.length > 4)
+      {
+        console.error("Line: '" + original + "'", "too many arguments.");
+        process.exit(1);
+      }
+
+      if (!check_instance(tokens[1]))
+      {
+        console.error("Line: '" + original + "'", "expected instance name.");
+        process.exit(1);
+      }
+      else
+      {
+        tokens[1] = tokens[1].substr(1, tokens[1].length);
+        if (!import_froms.includes(tokens[1]))
+        {
+          console.error("Line: '" + original + "'", "unknown instance name.");
+          process.exit(1);
+        }
+      }
+
+      if (!check_number(tokens[2]) && tokens[2] !== "center")
+      {
+        console.error("Line: '" + original + "'", "expected number or \"center\" keyword after the instance name.");
+        process.exit(1);
+      }
+
+      if (!check_number(tokens[3]) && tokens[3] !== "center")
+      {
+        console.error("Line: '" + original + "'", "expected number or \"center\" keyword after the x position.");
+        process.exit(1);
+      }
+
+      if (tokens[2] === "center")
+      { tokens[2] = String(_module.width / 2); }
+
+      if (tokens[3] === "center")
+      { tokens[3] = String(_module.height / 2); }
+
+      line += tokens[1] + ".style.x = \"" + tokens[2] + "px\";\n";
+      line += tokens[1] + ".style.y = \"" + tokens[3] + "px\";";
+      break;
+    case "size":
+      if (tokens.length < 4)
+      {
+        console.error("Line: '" + original + "'", "too few arguments.");
+        process.exit(1);
+      }
+
+      if (tokens.length > 4)
+      {
+        console.error("Line: '" + original + "'", "too many arguments.");
+        process.exit(1);
+      }
+
+      if (!check_instance(tokens[1]))
+      {
+        console.error("Line: '" + original + "'", "expected instance name.");
+        process.exit(1);
+      }
+      else
+      {
+        tokens[1] = tokens[1].substr(1, tokens[1].length);
+        if (!import_froms.includes(tokens[1]))
+        {
+          console.error("Line: '" + original + "'", "unknown instance name.");
+          process.exit(1);
+        }
+      }
+
+      if (!check_number(tokens[2]) && tokens[2] !== "full")
+      {
+        console.error("Line: '" + original + "'", "expected number or \"full\" keyword after the instance name.");
+        process.exit(1);
+      }
+      
+      if (!check_number(tokens[3]) && tokens[3] !== "full")
+      {
+        console.error("Line: '" + original + "'", "expected number or \"full\" keyword after the width size.");
+        process.exit(1);
+      }
+
+      if (tokens[2] === "full")
+      { tokens[2] = String(_module.width); }
+
+      if (tokens[3] === "full")
+      { tokens[3] = String(_module.height); }
+
+      line += tokens[1] + ".style.width = \"" + tokens[2] + "px\";\n";
+      line += tokens[1] + ".style.height = \"" + tokens[3] + "px\";";
+      break;
+    case "setAttribute":
+      if (tokens.length < 4)
+      {
+        console.error("Line: '" + original + "'", "too few arguments.");
+        process.exit(1);
+      }
+
+      if (tokens.length > 4)
+      {
+        console.error("Line: '" + original + "'", "too many arguments.");
+        process.exit(1);
+      }
+
+      if (!check_instance(tokens[1]))
+      {
+        console.error("Line: '" + original + "'", "expected instance name.");
+        process.exit(1);
+      }
+      else
+      {
+        tokens[1] = tokens[1].substr(1, tokens[1].length);
+        if (!import_froms.includes(tokens[1]))
+        {
+          console.error("Line: '" + original + "'", "unknown instance name.");
+          process.exit(1);
+        }
+      }
+
+      if (!check_string(tokens[2]))
+      {
+        console.error("Line: '" + original + "'", "expected string after the instance name.");
+        process.exit(1);
+      }
+      
+      if (!check_string(tokens[3]) && !check_number(tokens[3]))
+      {
+        console.error("Line: '" + original + "'", "expected string or number after the attribute name.");
+        process.exit(1);
+      }
+
+      tokens[2] = tokens[2].substr(1, tokens[2].length - 2);
+
+      switch (tokens[2])
+      {
+        case "text":
+          if (!check_string(tokens[3]))
+          {
+            console.error("Line: '" + original + "'", "expected string after the attribute name.");
+            process.exit(1);
+          }
+
+          tokens[3] = tokens[3].substr(1, tokens[3].length - 2);
+          line += tokens[1] + ".innerText = \"" + tokens[3] + "\";";
+          break;
+        case "font":
+          if (!check_string(tokens[3]))
+          {
+            console.error("Line: '" + original + "'", "expected string after the attribute name.");
+            process.exit(1);
+          }
+
+          tokens[3] = tokens[3].substr(1, tokens[3].length - 2);
+          line += tokens[1] + ".style.fontFamily = \"" + tokens[3] + "\";";
+          break;
+        case "fontSize":
+          if (!check_number(tokens[3]))
+          {
+            console.error("Line: '" + original + "'", "expected number after the attribute name.");
+            process.exit(1);
+          }
+
+          line += tokens[1] + ".style.fontSize = \"" + tokens[3] + "px\";";
+          break;
+        case "textAlign":
+          if (!check_string(tokens[3]))
+          {
+            console.error("Line: '" + original + "'", "expected string after the attribute name.");
+            process.exit(1);
+          }
+
+          tokens[3] = tokens[3].substr(1, tokens[3].length - 2);
+
+          switch (tokens[3])
+          {
+            case "left":
+              line += tokens[1] + ".style.textAlign = \"left\";\n";
+              line += tokens[1] + ".style.lineHeight = " + tokens[1] + ".style.height;";
+              break;
+            case "center":
+              line += tokens[1] + ".style.textAlign = \"center\";\n";
+              line += tokens[1] + ".style.lineHeight = " + tokens[1] + ".style.height;";
+              break;
+            case "right":
+              line += tokens[1] + ".style.textAlign = \"right\";\n";
+              line += tokens[1] + ".style.lineHeight = " + tokens[1] + ".style.height;";
+              break;
+            default:
+              console.error("Line: '" + original + "'", "expected string after the attribute name.");
+              process.exit(1);
+          }
+
+          break;
+        default:
+          console.error("Line: '" + original + "'", "unknown attribute name.");
+          process.exit(1);
+      }
+
+      break;
+    case "show":
+      if (tokens.length < 2)
+      {
+        console.error("Line: '" + original + "'", "too few arguments.");
+        process.exit(1);
+      }
+
+      if (tokens.length > 2)
+      {
+        console.error("Line: '" + original + "'", "too many arguments.");
+        process.exit(1);
+      }
+
+      if (!check_instance(tokens[1]))
+      {
+        console.error("Line: '" + original + "'", "expected instance name.");
+        process.exit(1);
+      }
+
+      tokens[1] = tokens[1].substr(1, tokens[1].length);
+      
+      if (!import_froms.includes(tokens[1]))
+      {
+        console.error("Line: '" + original + "'", "unknown instance name.");
+        process.exit(1);
+      }
+
+      line += tokens[1] + ".style.hidden = false;";
       break;
   }
 
@@ -576,6 +851,10 @@ function compile(argv, i) {
     const lines = data.split("\n");
     compiled = "\"use strict\";\n";
     compiled += "const scene = document.querySelector(\"#scene\");\n";
+    compiled += "if (scene === null) {\n";
+    compiled += "throw new Error(\"This script isn't compatible with your application.\");\n";
+    compiled += "}\n";
+    compiled += "let loaded = true;\n";
     parsed_moduleFrom = false;
     parsed_exportTo = false;
     added_interval = false;
@@ -637,7 +916,7 @@ function compile(argv, i) {
         process.exit(1);
       }
 
-      console.log("Successfully compiled file: \"" + argv[i] + "\".");
+      console.log("Successfully compiled file: \"" + argv[i] + "\" to JavaScript file: \"" + export_to + "\".");
     });
   });
 }
