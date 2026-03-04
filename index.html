@@ -76,13 +76,9 @@
       </form>
     </div>
     <div id="menu_btns" align="center">
-      <button onclick="window.location.href = '#whats_new';">What's New</button>
-      <br>
       <button onclick="window.location.href = '#patch_notes';">Patch Notes</button>
       <br>
       <button onclick="window.location.href = '#docs';">Read Documentations</button>
-      <br>
-      <button onclick="window.location.href = '#';">Back to Top</button>
       <br>
       <button id="ret_menu" disabled>Return to Menu</button>
       <br>
@@ -97,7 +93,7 @@
     <div id="menu">
       <div align="center">
         <h1 align="center" id="small_icon" hidden>OpenFusion</h1>
-        <img src="images/logo.webp" id="large_icon">
+        <img src="images/logo.webp" id="large_icon" draggable="false">
         <h3 align="center">
           <b><i>An entirely free game engine, made for performance and an alternative to Clickteam Fusion.</i></b>
           <h1 id="current_version"></h1>
@@ -109,15 +105,15 @@
       </div>
       <div class="container">
         <h2>Why OpenFusion?</h2>
-        <p>
+        <span>
         OpenFusion is multi-platform website game engine that's very light-weight.
-        </p>
-        <p>
+        </span>
+        <span>
         The program is designed to very light-weight and efficent, so that no package manager is needed for the program.
-        </p>
-        <p>
+        </span>
+        <span>
         The entire codebase is open-source, so everyone can use/distribute it for free.
-        </p>
+        </span>
       </div>
       <div class="container">
         <h2>Fun Fact</h2>
@@ -126,24 +122,28 @@
         its runtime used a standalone application to do that kind of thing and that really screwed me up at that day.
         </q>
         <ul>
-          <p>
+          <span>
           -
           <a onclick="window.open('https://github.com/antagonistry');">@antagonistry</a>
-          </p>
+          </span>
         </ul>
       </div>
       <div class="container">
         <h2>About Us</h2>
-        <p>
+        <span>
         OpenFusion was originally created by
         <a onclick="window.open('https://github.com/antagonistry');">@antagonistry</a>
         in February 27 2026, it was designed to an alternative to the
-        Clickteam Fusion, and it also supports easier networking and even faster
+        Clickteam Fusion.
+        </span>
+        <br>
+        <span>
+        It also supports easier networking and even faster
         performance.
-        </p>
-        <p>
+        </span>
+        <span>
         If you want to contribute to our project, you can; right now!
-        </p>
+        </span>
       </div>
       <div class="container">
         <h2 id="patch_notes">Patch Notes</h2>
@@ -184,41 +184,46 @@
         </ul>
         <ul>
           <h2 id="getting_started">Getting Started</h2>
-          <p>
+          <span>
           <ul>
-            <p>
+            <span>
             First, you need to download the
             <a onclick="install.click();">repository ZIP file</a>
             up there, and then install NodeJS with
             <a onclick="window.open('https://nodejs.org/en/download');">this link</a>;
-            </p>
-            <p>
+            </span>
+            <span>
             after you've installed NodeJS and downloaded the repository ZIP file, you may
             now see the OpenFusion in your download folder.
-            </p>
-            <p>
+            </span>
+            <span>
             After everything is done,
             open index.html inside the OpenFusion folder and enjoy creating your application! 
-            </p>
+            </span>
           </ul>
         </ul>
         <ul>
           <h2 id="classic_hello_world_application">Classic "Hello, World!" Application</h2>
-          <p>
+          <span>
           If you've never heard about "Hello, World" program before, it's just a program displaying the word "Hello, World!" on the screen.
-          </p>
-          <p>
+          </span>
+          <br>
+          <span>
           In OpenFusion, you'll need to use the Dwarf language and the OpenFusion editor to get the work done.
-          </p>
-          <p>
+          </span>
+          <br>
+          <span>
           First, click the new application on the menu, then click create;
-          </p>
-          <p>
+          </span>
+          <br>
+          <span>
           after that you'll go inside the editor.
-          </p>
-          <p>
+          </span>
+          <br>
+          <span>
           When you're in the editor, open click the script editor and paste the code below.
-          </p>
+          </span>
+          <br>
           <div class="code"><h2>MyApp.dw</h2>
 moduleFrom "./MyApp.json"
 importTo "./MyApp.js"
@@ -232,22 +237,26 @@ when IS LOADED
   setAttribute $MyString "text" "Hello, World!"
   show $MyString
 end</div>
-          <p>
+          <span>
           After you've copy this exact script, you can now compile it into JavaScript's format by using the dwc compiler.
-          </p>
-          <p>
+          </span>
+          <br>
+          <span>
           You'd need to load the script and test the application and here's what'll happen inside the application.
-          </p>
+          </span>
+          <br>
           <img src="images/hello_openfusion.webp">
         </ul>
         <ul>
           <h2 id="learning_the_syntaxes">Learning the Syntaxes</h2>
-          <p>
+          <span>
           Dwarf is language that's very easy to learn, it also got a few keywords to remember!
-          </p>
-          <p>
+          </span>
+          <br>
+          <span>
           Here's all keywords that you'll need to learn:
-          </p>
+          </span>
+          <br>
           <div class="code"><h2>keywords.dw</h2>
 # This line is a comment, the compiler will cut this part out of its way.
 
@@ -282,28 +291,31 @@ show [instance_id (instance)]
 end
 # note: end is a keyword to end the when statement
 # example for end:          end</div>
-          <p>
+          <span>
           Please take your time and read all informations about the keywords.
-          </p>
+          </span>
         </ul>
       </div>
       <div class="container">
         <h2>Questions and Answers</h2>
         <ul>
           <h2>Is OpenFusion legal?</h2>
-          <p>Yes, it's completely legal.</p>
-          <p>We didn't used any Clickteam Fusion source code to create the software.</p>
-          <p>And the software is built from scratch.</p>
+          <span>Yes, it's completely legal.</span>
+          <br>
+          <span>We didn't used any Clickteam Fusion source code to create the software.</span>
+          <br>
+          <span>And the software is built from scratch.</span>
+          <br>
           <h2>Is OpenFusion better than the current Clickteam Fusion now?</h2>
-          <p>No, because the project has just been developed.</p>
+          <span>No, because the project has just been developed.</span>
         </ul>
       </div>
       <div class="container">
         <h2>Licensing</h2>
-        <p>
+        <span>
         OpenFusion uses MIT License for the entire software, more informations about the license is
         <a onclick="window.open('./LICENSE.txt');">here</a>.
-        </p>
+        </span>
       </div>
     </div>
     <div id="editor" hidden>

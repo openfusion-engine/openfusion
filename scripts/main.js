@@ -2,12 +2,13 @@
 
 let user_agent = navigator.userAgent;
 
-if (user_agent.includes("Android") || (user_agent.includes("iOS") && !user_agent.includes("iPad")))
+if (user_agent.includes("Android") || (user_agent.includes("iOS") || user_agent.includes("iPad")))
 {
   large_icon.hidden = true;
   small_icon.hidden = false;
   menu_btns.hidden = true;
-  install.disabled = false;
+  install.hidden = false;
+  menu.style.borderColor = "rgba(0, 0, 0, 0)";
 }
 
 switch (window.location.protocol)
@@ -51,7 +52,7 @@ const default_instance = Object.freeze({
 
 const version = "0.0.2";
 let bytecode = Object.assign({}, default_bytecode);
-current_version.innerText = "[" + version + "]";
+current_version.innerText = "(" + version + ")";
 
 window.onbeforeunload = function() {
   editor.hidden = true;
@@ -127,6 +128,7 @@ close_app.onclick = function() {
   link.href = "data:text/javascript;";
   link.href += "charset=utf-8,";
   link.href += JSON.stringify(bytecode);
+  link.href = link.href.replaceAll("#", "%23");
   link.download = bytecode["title"] + ".json";
   link.click();
   link.remove();
@@ -139,6 +141,69 @@ close_app.onclick = function() {
   close_app.disabled = true;
   new_app.disabled = false;
 };
+
+build_app.onclick = function() {
+  const link = document.createElement("a");
+  link.href = "data:application/html;";
+  link.href += "charset=utf-8,";
+  link.href += "<!DOCTYPE html>\n";
+  link.href += "<html>\n";
+  link.href += "\t<head>\n";
+  link.href += "\t\t<title>" + bytecode["title"] + "</title>\n";
+  link.href += "\t\t<meta charset=\"utf-8\">\n";
+  link.href += "\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
+  link.href += "\t\t<style>\n";
+  link.href += "\t\t\tbody {\n";
+  link.href += "\t\t\t\tbackground-color: #222529;\n";
+  link.href += "\t\t\t}\n";
+  link.href += "\t\t\t#scene {\n";
+  link.href += "\t\t\t\tposition: absolute;\n";
+  link.href += "\t\t\t\ttop: 50%;\n";
+  link.href += "\t\t\t\tleft: 50%;\n";
+  link.href += "\t\t\t\ttransform: translate(-50%, -50%);\n";
+  link.href += "\t\t\t\tbackground-color: " + parse_color(bytecode["color"]) + ";\n";
+  link.href += "\t\t\t\tpadding: 12px;\n";
+  link.href += "\t\t\t\tborder-radius: 12px;\n";
+  link.href += "\t\t\t\twidth: " + bytecode["width"] + "px;\n";
+  link.href += "\t\t\t\theight: " + bytecode["height"] + "px;\n";
+  link.href += "\t\t\t}\n";
+  link.href += "\t\t\t#scene * {\n";
+  link.href += "\t\t\t\tposition: absolute;\n";
+  link.href += "\t\t\t}\n";
+  link.href += "\t\t</style>\n";
+  link.href += "\t</head>\n";
+  link.href += "\t<body>\n";
+  link.href += "\t\t<div id=\"scene\">\n";
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    const instance = bytecode["instances"][i];
+    switch (instance["type"])
+    {
+      case "active":
+        link.href += "<img id=\"" + instance["name"] + "\">\n";
+        break;
+      case "string":
+        link.href += "<span id=\"" + instance["name"] + "\"></span>\n";
+        break;
+      case "counter":
+        link.href += "<span id=\"" + instance["name"] + "\"></span>\n";
+        break;
+    }
+  }
+
+  link.href += "\t\t</div>\n";
+  link.href += "\t</body>\n";
+  link.href += "\t<script src=\"" + bytecode["script"] + "\"></script>";
+  link.href += "\t<noscript>\n"
+  link.href += "\t\t<span>JavaScript is required to run this application.</span>\n"
+  link.href += "\t</noscript>\n";
+  link.href += "</html>\n";
+  link.href = link.href.replaceAll("#", "%23");
+  link.download = bytecode["title"] + ".html";
+  link.click();
+  link.remove();
+}
 
 load_script.onclick = function() {
   file_input_script.click();
@@ -215,6 +280,42 @@ function parse_bytecode() {
       scene.style.backgroundColor = "rgba(" + color.join(", ") + ")";
       break;
   }
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    const instance = bytecode["instances"][i];
+    const instance_child = document.createElement("span");
+    instance_child.innerText = instance["name"] + " [";
+    instance_child.innerText += instance["type"].charAt(0).toUpperCase();
+    instance_child.innerText += instance["type"].substr(1, instance["type"].length);
+    instance_child.innerText += "]";
+    instances.append(instance_child);
+    instances.append(document.createElement("hr"));
+  }
+}
+
+function parse_color(color) {
+  if (typeof(color) !== "string")
+  { return ""; }
+
+  switch (true)
+  {
+    case color.startsWith("HEX::"):
+      color = color.replace("HEX::", "#");
+      break;
+    case color.startsWith("RGB::"):
+      color = color.replace("RGB::", "");
+      color = color.split(",");
+      color = "rgb(" + color.join(", ") + ")";
+      break;
+    case color.startsWith("RGBA::"):
+      color = color.replace("RGBA::", "");
+      color = color.split(",");
+      color = "rgba(" + color.join(", ") + ")";
+      break;
+  }
+
+  return color;
 }
 
 file_input_app.onchange = function(event) {
