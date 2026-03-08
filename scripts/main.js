@@ -1,14 +1,26 @@
 "use strict";
-
+let new_instance = document.querySelector("#new_instance");
+let remove_instance = document.querySelector("#remove_instance");
+let new_variable = document.querySelector("#new_variable");
+let remove_variable = document.querySelector("#remove_variable");
 let user_agent = navigator.userAgent;
+let is_mobile = false;
 
 if (user_agent.includes("Android") || (user_agent.includes("iOS") || user_agent.includes("iPad")))
 {
+  is_mobile = true;
   large_icon.hidden = true;
   small_icon.hidden = false;
   menu_btns.hidden = true;
-  install.hidden = false;
+  install.hidden = true;
   menu.style.borderColor = "rgba(0, 0, 0, 0)";
+  menu.style.backgroundColor = "#333333";
+  menu.style.width = "85%";
+  menu.style.height = "85%";
+  editor.style.borderColor = "rgba(0, 0, 0, 0)";
+  editor.style.backgroundColor = "#333333";
+  editor.style.width = "85%";
+  editor.style.height = "85%";
 }
 
 switch (window.location.protocol)
@@ -32,8 +44,6 @@ switch (window.location.protocol)
     break;
 }
 
-const autosave_item = Object.freeze("OpenFusion_Autosave");
-
 const default_bytecode = Object.freeze({
   "version": "0.0.1",
   "title": "OpenFusion Application",
@@ -50,9 +60,25 @@ const default_instance = Object.freeze({
   "type": "",
 });
 
-const version = "0.0.2";
+const version = "0.0.3";
 let bytecode = Object.assign({}, default_bytecode);
 current_version.innerText = "(" + version + ")";
+
+window.onload = function() {
+  new_instance.onclick = new_instance_click;
+  remove_instance.onclick = remove_instance_click;
+  new_variable.onclick = new_variable_click;
+  remove_variable.onclick = remove_variable_click;
+
+  switch (true)
+  {
+    case (window.innerWidth >= 700 && window.innerHeight >= 700) || is_mobile:
+      resize_menu.hidden = true;
+      break;
+    default:
+      resize_menu.hidden = false;
+  }
+};
 
 window.onbeforeunload = function() {
   editor.hidden = true;
@@ -61,7 +87,17 @@ window.onbeforeunload = function() {
   ret_editor.disabled = true;
   new_app.disabled = false;
   close_app.disabled = true;
-  localStorage.setItem(autosave_item, JSON.stringify(bytecode));
+};
+
+window.onresize = function() {
+  switch (true)
+  {
+    case (window.innerWidth >= 800 && window.innerHeight >= 800) || is_mobile:
+      resize_menu.hidden = true;
+      break;
+    default:
+      resize_menu.hidden = false;
+  }
 };
 
 install.onclick = function() {
@@ -102,7 +138,7 @@ app_creation_form.onsubmit = function(event) {
   bytecode["title"] = form_data["app_name"];
   bytecode["width"] = parseInt(form_data["app_width"]);
   bytecode["height"] = parseInt(form_data["app_height"]);
-  bytecode["color"] = parseInt(form_data["app_background"]);
+  bytecode["color"] = form_data["app_background"];
   menu.hidden = true;
   editor.hidden = false;
   app_creation.hidden = true;
@@ -112,12 +148,12 @@ app_creation_form.onsubmit = function(event) {
   ret_editor.disabled = true;
   close_app.disabled = false;
   parse_bytecode();
-}
+};
 
 cancel_app_creation.onclick = function(event) {
   app_creation.hidden = true;
   app_creation_form.reset();
-}
+};
 
 open_app.onclick = function() {
   file_input_app.click();
@@ -132,7 +168,6 @@ close_app.onclick = function() {
   link.download = bytecode["title"] + ".json";
   link.click();
   link.remove();
-
   bytecode = Object.assign({}, default_bytecode);
   editor.hidden = true;
   menu.hidden = false;
@@ -143,6 +178,9 @@ close_app.onclick = function() {
 };
 
 build_app.onclick = function() {
+  if (bytecode["script"] === "")
+  { return; }
+
   const link = document.createElement("a");
   link.href = "data:application/html;";
   link.href += "charset=utf-8,";
@@ -155,6 +193,10 @@ build_app.onclick = function() {
   link.href += "\t\t<style>\n";
   link.href += "\t\t\tbody {\n";
   link.href += "\t\t\t\tbackground-color: #222529;\n";
+  link.href += "\t\t\t\tmargin: 0px;\n";
+  link.href += "\t\t\t\tpadding: 0px;\n";
+  link.href += "\t\t\t\twidth: 100vw;\n";
+  link.href += "\t\t\t\theight: 100vh;\n";
   link.href += "\t\t\t}\n";
   link.href += "\t\t\t#scene {\n";
   link.href += "\t\t\t\tposition: absolute;\n";
@@ -203,13 +245,13 @@ build_app.onclick = function() {
   link.download = bytecode["title"] + ".html";
   link.click();
   link.remove();
-}
+};
 
 load_script.onclick = function() {
   file_input_script.click();
 };
 
-new_instance.onclick = function() {
+function new_instance_click() {
   if (instance_creation.hidden)
   { instance_creation.hidden = false; }
 }
@@ -217,9 +259,6 @@ new_instance.onclick = function() {
 instance_creation_form.onsubmit = function(event) {
   event.preventDefault();
   let form_data = Object.fromEntries(new FormData(instance_creation_form));
-
-  if (form_data["instance_name"] === "" || form_data["instance_type"] === "")
-  { return; }
 
   for (let i = 0; i < bytecode["instances"].length; i++)
   {
@@ -242,12 +281,180 @@ instance_creation_form.onsubmit = function(event) {
   instance_child.innerText += "]";
   instances.append(instance_child);
   instances.append(document.createElement("hr"));
-}
+};
 
 cancel_instance_creation.onclick = function() {
   instance_creation.hidden = true;
   instance_creation_form.reset();
+};
+
+function remove_instance_click() {
+  if (instance_deletion.hidden)
+  { instance_deletion.hidden = false; }
 }
+
+instance_deletion_form.onsubmit = function(event) {
+  event.preventDefault();
+  let form_data = Object.fromEntries(new FormData(instance_deletion_form));
+  let index = -1;
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    if (bytecode["instances"][i].name === form_data["instance_name"])
+    {
+      index = i;
+      break;
+    }
+
+    continue;
+  }
+
+  if (index === -1)
+  { return; }
+
+  bytecode["instances"].splice(index, 1);
+  instance_deletion.hidden = true;
+  instance_deletion_form.reset();
+  instances.innerHTML = "";
+  let element = document.createElement("h2");
+  element.innerText = "Instances";
+  instances.append(element);
+  element = document.createElement("button");
+  element.id = "new_instance";
+  element.innerText = "New Instance";
+  new_instance = element;
+  instances.append(element);
+  instances.append(document.createElement("hr"));
+  element = document.createElement("button");
+  element.id = "remove_instance";
+  element.innerText = "Remove Instance";
+  remove_instance = element;
+  instances.append(element);
+  instances.append(document.createElement("h2"));
+  new_instance.onclick = new_instance_click;
+  remove_instance.onclick = remove_instance_click;
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    const instance = bytecode["instances"][i];
+
+    if (instance["type"] === "variable")
+    { continue; }
+
+    const instance_child = document.createElement("span");
+    instance_child.innerText = instance["name"] + " [";
+    instance_child.innerText += instance["type"].charAt(0).toUpperCase();
+    instance_child.innerText += instance["type"].substr(1, instance["type"].length);
+    instance_child.innerText += "]";
+    instances.append(instance_child);
+    instances.append(document.createElement("hr"));
+  }
+};
+
+cancel_instance_deletion.onclick = function() {
+  instance_deletion.hidden = true;
+  instance_deletion_form.reset();
+};
+
+function new_variable_click() {
+  if (variable_creation.hidden)
+  { variable_creation.hidden = false; }
+}
+
+variable_creation_form.onsubmit = function(event) {
+  event.preventDefault();
+  let form_data = Object.fromEntries(new FormData(variable_creation_form));
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    if (bytecode["instances"][i].name === form_data["instance_name"])
+    { return; }
+
+    continue;
+  }
+
+  const variable = Object.assign({}, default_instance);
+  variable["name"] = form_data["variable_name"] + "_variable";
+  variable["type"] = "variable";
+  bytecode["instances"].push(variable);
+  variable_creation.hidden = true;
+  variable_creation_form.reset();
+  const variable_child = document.createElement("span");
+  variable_child.innerText = form_data["variable_name"];
+  variables.append(variable_child);
+  variables.append(document.createElement("hr"));
+} 
+
+cancel_variable_creation.onclick = function() {
+  variable_creation.hidden = true;
+  variable_creation_form.reset();
+};
+
+function remove_variable_click() {
+  if (variable_deletion.hidden)
+  { variable_deletion.hidden = false; }
+}
+
+variable_deletion_form.onsubmit = function() {
+  event.preventDefault();
+  let form_data = Object.fromEntries(new FormData(variable_deletion_form));
+  let index = -1;
+  form_data["variable_name"] += "_variable";
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    if (bytecode["instances"][i].name === form_data["variable_name"])
+    {
+      index = i;
+      break;
+    }
+
+    continue;
+  }
+
+  if (index === -1)
+  { return; }
+
+  bytecode["instances"].splice(index, 1);
+  variable_deletion.hidden = true;
+  variable_deletion_form.reset();
+  variables.innerHTML = "";
+  let element = document.createElement("h2");
+  element.innerText = "Variables";
+  variables.append(element);
+  element = document.createElement("button");
+  element.id = "new_variable";
+  element.innerText = "New Variable";
+  new_variable = element;
+  variables.append(element);
+  variables.append(document.createElement("hr"));
+  element = document.createElement("button");
+  element.id = "remove_variable";
+  element.innerText = "Remove Variable";
+  remove_variable = element;
+  variables.append(element);
+  variables.append(document.createElement("h2"));
+  new_variable.onclick = new_variable_click;
+  remove_variable.onclick = remove_variable_click;
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    const instance = bytecode["instances"][i];
+
+    if (instance["type"] !== "variable")
+    { continue; }
+
+    const variable_child = document.createElement("span");
+    variable_child.innerText = instance["name"].substr(0, instance["name"].length - "_variable".length);
+    variables.append(variable_child);
+    variables.append(document.createElement("hr"));
+  }
+}
+
+cancel_variable_deletion.onclick = function() {
+  variable_deletion.hidden = true;
+  variable_deletion_form.reset();
+};
 
 function parse_bytecode() { 
   scene.style.width = bytecode["width"].toString() + "px";
@@ -362,7 +569,7 @@ file_input_app.onchange = function(event) {
   };
 
   reader.readAsText(files[0]); 
-}
+};
 
 file_input_script.onchange = function(event) {
   if (file_input_script.files.length !== 1)
@@ -376,12 +583,12 @@ color_selector.onchange = function(event) {
   const color = event.target.value;
   scene.style.backgroundColor = color;
   bytecode["color"] = "HEX::" + color.substr(1, color.length);
-}
+};
 
 modify_metadata.onclick = function(event) {
   if (metadata_modification.hidden)
   { metadata_modification.hidden = false; }
-}
+};
 
 metadata_modification_form.onsubmit = function(event) {
   event.preventDefault();
@@ -394,9 +601,9 @@ metadata_modification_form.onsubmit = function(event) {
   metadata_modification_form.hidden = true;
   metadata_modification_form.reset();
   parse_bytecode();
-}
+};
 
 cancel_metadata_modification.onclick = function() {
   metadata_modification.hidden = true;
   metadata_modification_form.reset();
-}
+};

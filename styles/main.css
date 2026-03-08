@@ -22,9 +22,9 @@
 body {
   margin: 0px;
   padding: 0px;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  width: 100%;
-  height: 100%;
   background-color: #222222;
   user-select: none;
   color: #FFFFFF;
@@ -32,8 +32,8 @@ body {
   font-family: "firasans_regular";
 }
 
-div {
-  scrollbar-width: none;
+* {
+  box-sizing: border-box;
 }
 
 h2 {
@@ -77,6 +77,22 @@ h2 {
 
 ul h2 {
   margin-top: 0px;
+}
+
+#large_icon {
+  border: 0px;
+}
+
+img {
+  border-radius: 12px;
+  border: 4px solid #dadada;
+  margin: 8px;
+  max-width: 768px;
+  max-height: 512px;
+}
+
+ul h2:not(:first-child) {
+  margin-top: 12px;
 }
 
 ul li {
@@ -129,17 +145,23 @@ button, input, select {
   color: #FF52F7;
 }
 
+#resize_menu {
+  background-color: #222222;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  overflow: scroll;
+  z-index: 514;
+}
+
 #menu, #editor {
   justify-content: center;
   border-radius: 8px;
-  border: 4px solid #dadada;
   background-color: #333333;
   position: absolute;
-  width: 95%;
-  height: 95%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
   padding: 12px;
   overflow: scroll;
 }
@@ -192,9 +214,9 @@ button, input, select {
   border-radius: 8px;
   border: 4px solid #777777;
   background-color: #666666;
-  position: absolute;
-  bottom: 3%;
-  right: 3%;
+  position: fixed;
+  bottom: 1%;
+  right: 1%;
   opacity: 0.125;
   transition: 0.25s;
 }
@@ -246,8 +268,8 @@ button, input, select {
 }
 
 #instances {
-  width: 256px;
-  height: 95%;
+  width: 288px;
+  height: 60%;
   position: absolute;
   top: 2%;
   left: 2%;
@@ -260,8 +282,23 @@ button, input, select {
   transition: 0.25s;
 }
 
-#properties {
-  width: 256px;
+#position_editor {
+  width: 288px;
+  height: 32.5%;
+  position: absolute;
+  bottom: 2%;
+  left: 2%;
+  overflow: scroll;
+  text-align: center;
+  border: 4px solid #555555;
+  border-radius: 8px;
+  background-color: #333333;
+  opacity: 0.5;
+  transition: 0.25s;
+}
+
+#variables {
+  width: 288px;
   height: 60%;
   position: absolute;
   bottom: 2%;
@@ -276,7 +313,7 @@ button, input, select {
 }
 
 #app_controller {
-  width: 256px;
+  width: 288px;
   height: 32.5%;
   position: absolute;
   top: 2%;
@@ -290,11 +327,11 @@ button, input, select {
   transition: 0.25s;
 }
 
-#instances:hover, #properties:hover, #app_controller:hover {
+#instances:hover, #variables:hover, #app_controller:hover, #position_editor:hover {
   opacity: 1.0;
 }
 
-#properties h2, #app_controller h2 {
+#variables h2, #app_controller h2 {
   width: 95%;
   padding: 2px;
   transform: translate(-2%, 0);
@@ -307,15 +344,15 @@ button, input, select {
   margin-bottom: 6px;
 }
 
-#instances button, #properties button {
+#instances button, #variables button, #position_editor button {
   width: 75%;
 }
 
-#instances hr, #properties hr, #app_controller hr {
+#instances hr, #variables hr, #app_controller hr, #position_editor hr {
   visibility: hidden;
 }
 
-#instances h2 {
+#instances h2, #position_editor h2 {
   width: 95%;
   padding: 2px;
   transform: translate(-2%, 0);

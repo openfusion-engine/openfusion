@@ -3,15 +3,18 @@
   <head>
     <title>OpenFusion</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="styles/main.css">
   </head>
   <body>
+    <div id="resize_menu" hidden>
+      <p>The current resolution of the screen is too small, please increase the resolution.</p>
+    </div>
     <div id="app_creation" hidden>
       <form class="popup" id="app_creation_form">
         <h2>Application Creation</h2>
         <label for="app_name">Application name:</label>
-        <input name="app_name" type="text" value="OpenFusion Application" required>
+        <input name="app_name" type="text" value="OpenFusion Application" pattern="[a-zA-Z_ ]{1,32}" required>
         <br>
         <label for="app_width">Application width:</label>
         <input name="app_width" type="number" min="512" max="1024" value="512" required>
@@ -34,7 +37,7 @@
       <form class="popup" id="metadata_modification_form">
         <h2>Metadata Modification</h2>
         <label for="app_name">Application name:</label>
-        <input name="app_name" type="text" value="OpenFusion Application" required>
+        <input name="app_name" type="text" value="OpenFusion Application" pattern="[a-zA-Z_ ]{1,32}" required>
         <br>
         <label for="app_width">Application width:</label>
         <input name="app_width" type="number" min="512" max="1024" value="512" required>
@@ -57,7 +60,7 @@
       <form class="popup" id="instance_creation_form">
         <h2>Instance Creation</h2>
         <label for="instance_name">Instance name:</label>
-        <input name="instance_name" type="text" value="Instance" required>
+        <input name="instance_name" type="text" value="Instance" pattern="[a-zA-Z_ ]{1,32}" required>
         <br>
         <label for="instance_type">Instance type:</label>
         <select name="instance_type" required>
@@ -73,6 +76,48 @@
         <button type="submit">Create</button>
         <br>
         <button type="button" id="cancel_instance_creation">Cancel</button>
+      </form>
+    </div>
+    <div id="instance_deletion" hidden>
+      <form class="popup" id="instance_deletion_form">
+        <h2>Instance Deletion</h2>
+        <label for="instance_name">Instance name:</label>
+        <input name="instance_name" type="text" value="Instance" pattern="[a-zA-Z_ ]{1,32}" required>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button type="submit">Delete</button>
+        <br>
+        <button type="button" id="cancel_instance_deletion">Cancel</button>
+      </form>
+    </div>
+    <div id="variable_creation" hidden>
+      <form class="popup" id="variable_creation_form">
+        <h2>Variable Creation</h2>
+        <label for="variable_name">Variable name:</label>
+        <input name="variable_name" type="text" value="Variable" pattern="[a-zA-Z_ ]{1,32}" required>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button type="submit">Create</button>
+        <br>
+        <button type="button" id="cancel_variable_creation">Cancel</button>
+      </form>
+    </div>
+    <div id="variable_deletion" hidden>
+      <form class="popup" id="variable_deletion_form">
+        <h2>Variable Deletion</h2>
+        <label for="variable_name">Variable name:</label>
+        <input name="variable_name" type="text" value="Variable" pattern="[a-zA-Z_ ]{1,32}" required>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button type="submit">Delete</button>
+        <br>
+        <button type="button" id="cancel_variable_deletion">Cancel</button>
       </form>
     </div>
     <div id="menu_btns" align="center">
@@ -168,6 +213,16 @@
           <li>
             Add more contents to the documentations
           </li>
+          <h2>0.0.3</h2>
+          <li>
+            Add position editor into the editor menu
+          </li>
+          <li>
+            Remove unnecessary buttons inside the editor
+          </li>
+          <li>
+            Fix string append bug in the Dwarf language
+          </li>
         </ul>
       </div>
       <div class="container">
@@ -223,7 +278,6 @@
           <span>
           When you're in the editor, open click the script editor and paste the code below.
           </span>
-          <br>
           <div class="code"><h2>MyApp.dw</h2>
 moduleFrom "./MyApp.json"
 importTo "./MyApp.js"
@@ -231,7 +285,7 @@ importFrom $MyString as string
 
 when IS LOADED
   locate $MyString center center
-  size $MyString auto auto
+  size $MyString full full
   setAttribute $MyString "font" "monospace"
   setAttribute $MyString "size" 32
   setAttribute $MyString "text" "Hello, World!"
@@ -256,7 +310,6 @@ end</div>
           <span>
           Here's all keywords that you'll need to learn:
           </span>
-          <br>
           <div class="code"><h2>keywords.dw</h2>
 # This line is a comment, the compiler will cut this part out of its way.
 
@@ -306,6 +359,7 @@ end
           <br>
           <span>And the software is built from scratch.</span>
           <br>
+          <br>
           <h2>Is OpenFusion better than the current Clickteam Fusion now?</h2>
           <span>No, because the project has just been developed.</span>
         </ul>
@@ -329,24 +383,23 @@ end
         <button id="load_script">Load Script</button>
         <hr>
         <button id="modify_metadata">Modify Metadata</button>
+      </div> 
+      <div id="variables">
+        <h2>Variables</h2>
+        <button id="new_variable">New Variable</button>
+        <hr>
+        <button id="remove_variable">Remove Variable</button>
+        <h2></h2>
       </div>
       <div id="instances">
         <h2>Instances</h2>
         <button id="new_instance">New Instance</button>
         <hr>
         <button id="remove_instance">Remove Instance</button>
-        <hr>
-        <button id="edit_instance">Edit Instance</button>
         <h2></h2>
       </div>
-      <div id="properties">
-        <h2>Properties</h2>
-        <button id="new_property" disabled>New Property</button>
-        <hr>
-        <button id="remove_property" disabled>Remove Property</button>
-        <hr>
-        <button id="edit_property" disabled>Edit Property</button>
-        <h2></h2>
+      <div id="position_editor">
+        <h2>Position Editor</h2>
       </div>
     </div>
     <input type="file" id="file_input_app" accept=".json" hidden>

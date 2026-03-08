@@ -56,13 +56,7 @@ function split_tokens(tokens, i) {
     {
       for (let l = j + 1; l < tokens.length; l++)
       {
-        if (tokens[l][tokens[l].length - 1] !== "\"")
-        {
-          tokens[j] += tokens[l];
-          tokens.splice(l, 1);
-        }
-
-        tokens[j] += tokens[l];
+        tokens[j] += " " + tokens[l];
         tokens.splice(l, 1);
         break;
       }
