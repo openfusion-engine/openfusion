@@ -49,7 +49,7 @@ const default_bytecode = Object.freeze({
   "title": "OpenFusion Application",
   "width": 512,
   "height": 512,
-  "color": "HEX::f0efe6",
+  "color": "#f0efe6",
   "script": "",
   "scenes": [],
   "instances": [],
@@ -58,6 +58,8 @@ const default_bytecode = Object.freeze({
 const default_instance = Object.freeze({
   "name": "Instance",
   "type": "",
+  "x_position": 0,
+  "y_position": 0,
 });
 
 const version = "0.0.3";
@@ -469,24 +471,7 @@ function parse_bytecode() {
   }
 
   let color = bytecode["color"];
-  
-  switch (true)
-  {
-    case color.startsWith("HEX::"):
-      color = color.replace("HEX::", "#");
-      scene.style.backgroundColor = color;
-      break;
-    case color.startsWith("RGB::"):
-      color = color.replace("RGB::", "");
-      color = color.split(",");
-      scene.style.backgroundColor = "rgb(" + color.join(", ") + ")";
-      break;
-    case color.startsWith("RGBA::"):
-      color = color.replace("RGBA::", "");
-      color = color.split(",");
-      scene.style.backgroundColor = "rgba(" + color.join(", ") + ")";
-      break;
-  }
+  color = parse_color(color);
 
   for (let i = 0; i < bytecode["instances"].length; i++)
   {
@@ -505,22 +490,8 @@ function parse_color(color) {
   if (typeof(color) !== "string")
   { return ""; }
 
-  switch (true)
-  {
-    case color.startsWith("HEX::"):
-      color = color.replace("HEX::", "#");
-      break;
-    case color.startsWith("RGB::"):
-      color = color.replace("RGB::", "");
-      color = color.split(",");
-      color = "rgb(" + color.join(", ") + ")";
-      break;
-    case color.startsWith("RGBA::"):
-      color = color.replace("RGBA::", "");
-      color = color.split(",");
-      color = "rgba(" + color.join(", ") + ")";
-      break;
-  }
+  if (color[0] !== '#')
+  { return ""; }
 
   return color;
 }
@@ -549,6 +520,7 @@ file_input_app.onchange = function(event) {
         case typeof(bytecode.scenes) !== "object":
         case typeof(bytecode.instances) !== "object":
         case bytecode.version !== version:
+          bytecode = Object.assign({}, default_bytecode);
           throw new Error();
       }
       
@@ -561,7 +533,7 @@ file_input_app.onchange = function(event) {
       close_app.disabled = false;
     }
     catch
-    { return; }
+    { bytecode_error.hidden = false; }
   };
 
   reader.onerror = function() {
@@ -607,3 +579,39 @@ cancel_metadata_modification.onclick = function() {
   metadata_modification.hidden = true;
   metadata_modification_form.reset();
 };
+
+ok_bytecode_error.onclick = function() {
+  bytecode_error.hidden = true;
+};
+
+position_editor_form.onsubmit = function() {
+  event.preventDefault();
+  let form_data = Object.fromEntries(new FormData(position_editor_form));
+  let index = -1;
+
+  for (let i = 0; i < bytecode["instances"].length; i++)
+  {
+    if (bytecode["instances"][i].name === form_data["instance_name"])
+    {
+      index = i;
+      break;
+    }
+
+    continue;
+  }
+
+  if (index === -1)
+  { return; } 
+
+  const instance = bytecode["instances"][index];
+  instance["x_position"] = parseInt(form_data["x_position"]);
+  instance["y_position"] = parseInt(form_data["y_position"]);
+  
+  if (instance["x_position"] > bytecode["width"])
+  { return; }
+
+  if (instance["y_position"] > bytecode["height"])
+  { return; }
+
+  position_editor_form.reset();
+}

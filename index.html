@@ -10,6 +10,21 @@
     <div id="resize_menu" hidden>
       <p>The current resolution of the screen is too small, please increase the resolution.</p>
     </div>
+    <div id="bytecode_error" hidden>
+      <div class="popup">
+        <h2>Application Error</h2>
+        <span>It seems that your application isn't compatible with this version.</span>
+        <br>
+        <span>You can try to edit the version inside the file, but if this still doesn't work,</span>
+        <br>
+        <span>then the file might be modified.</span>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button type="button" id="ok_bytecode_error">OK</button>
+      </div>
+    </div>
     <div id="app_creation" hidden>
       <form class="popup" id="app_creation_form">
         <h2>Application Creation</h2>
@@ -399,7 +414,20 @@ end
         <h2></h2>
       </div>
       <div id="position_editor">
-        <h2>Position Editor</h2>
+        <form id="position_editor_form">
+          <h2></h2>
+          <label for="instance_name">Instance name:</label>
+          <input name="instance_name" type="text" value="Instance" pattern="[a-zA-Z_ ]{1,32}" required>
+          <br>
+          <label for="x_position">Instance X position:</label>
+          <input id="editor_x_pos" name="x_position" type="number" min="0" max="1024" value="0" required>
+          <br>
+          <label for="y_position">Instance Y position:</label>
+          <input id="editor_y_pos" name="y_position" type="number" min="0" max="768" value="0" required>
+          <br>
+          <br>
+          <button type="submit">Set Position</button>
+        </form>
       </div>
     </div>
     <input type="file" id="file_input_app" accept=".json" hidden>

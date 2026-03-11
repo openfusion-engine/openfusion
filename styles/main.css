@@ -68,11 +68,18 @@ h2 {
 }
 
 .popup h2 {
+  text-align: center;
   border-bottom: 2px solid #666666;
 }
 
-.popup label {
+.popup label, #position_editor label {
   margin-bottom: 6px;
+}
+
+#position_editor_form {
+  display: grid;
+  justify-content: center;
+  align-content: center;
 }
 
 ul h2 {
@@ -225,7 +232,7 @@ button, input, select {
   opacity: 1.0;
 }
 
-.popup br {
+.popup br, #position_editor br {
   margin-bottom: 12px;
 }
 
@@ -254,7 +261,7 @@ button, input, select {
   border-radius: 8px;
 }
 
-#editor h2 {
+#editor_h2 {
   position: sticky;
   width: 27.5%;
   left: 50%;
@@ -331,12 +338,6 @@ button, input, select {
   opacity: 1.0;
 }
 
-#variables h2, #app_controller h2 {
-  width: 95%;
-  padding: 2px;
-  transform: translate(-2%, 0);
-}
-
 #app_controller button {
   font-size: 14px;
   width: 75%;
@@ -344,16 +345,20 @@ button, input, select {
   margin-bottom: 6px;
 }
 
-#instances button, #variables button, #position_editor button {
+#instances button, #variables button {
   width: 75%;
+  margin-bottom: 6px;
+}
+
+#position_editor input, #position_editor button {
+  width: 100%;
+  margin-bottom: 6px;
 }
 
 #instances hr, #variables hr, #app_controller hr, #position_editor hr {
   visibility: hidden;
 }
 
-#instances h2, #position_editor h2 {
-  width: 95%;
-  padding: 2px;
-  transform: translate(-2%, 0);
+#position_editor h2 {
+  visibility: hidden;
 }
